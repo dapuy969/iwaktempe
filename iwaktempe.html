@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="IwakTempe - Toko makanan olahan ikan dan tempe">
+<title>IwakTempe Dapa - Enak, Gurih, Bikin Nagih!</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --primary:#16a34a; --primary-dark:#15803d; --secondary:#f59e0b;
+    --dark:#172015; --text:#374151; --light:#f7faf7; --white:#fff;
+    --danger:#dc2626; --wa:#25d366; --wa-dark:#1da851;
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+  }
+  body { font-family:Arial, Helvetica, sans-serif; background:var(--light); color:var(--text); }
+  button, input, select, textarea { font:inherit; }
+  button { cursor:pointer; }
+  a { color:inherit; }
+  img { max-width:100%; }
+
+  /* NAVBAR */
+  header.navbar { position:sticky; top:0; z-index:1000; background:rgba(255,255,255,.95); backdrop-filter:blur(12px); box-shadow:0 2px 15px rgba(0,0,0,.06); }
+  .nav-container { max-width:1200px; margin:auto; height:70px; padding:0 20px; display:flex; align-items:center; justify-content:space-between; }
+  .logo { display:flex; align-items:center; gap:10px; font-size:21px; font-weight:800; color:var(--primary-dark); text-decoration:none; }
+  .logo-icon { width:40px; height:40px; display:grid; place-items:center; background:linear-gradient(135deg,#22c55e,#15803d); color:#fff; border-radius:12px; font-size:22px; }
+  .nav-links { display:flex; gap:22px; font-size:14px; font-weight:600; color:var(--dark); }
+  .nav-links a { text-decoration:none; }
+  .nav-links a:hover { color:var(--primary-dark); }
+  .nav-actions { display:flex; align-items:center; gap:10px; }
+  .nav-whatsapp { display:flex; align-items:center; gap:6px; text-decoration:none; background:#e9fbf0; color:var(--wa-dark); padding:9px 13px; border-radius:10px; font-weight:700; font-size:13px; white-space:nowrap; }
+  .cart-button { position:relative; border:none; background:#ecfdf5; color:var(--primary-dark); width:43px; height:43px; border-radius:12px; font-size:20px; }
+  .cart-count { position:absolute; top:-5px; right:-5px; width:20px; height:20px; border-radius:50%; background:#ef4444; color:#fff; font-size:11px; display:grid; place-items:center; font-weight:bold; }
+
+  /* HERO */
+  .hero { max-width:1200px; margin:22px auto; padding:55px 40px; border-radius:28px; min-height:380px; display:flex; align-items:center; position:relative; overflow:hidden; background:radial-gradient(circle at 85% 20%, rgba(255,255,255,.3), transparent 30%), linear-gradient(135deg,#166534,#22c55e); color:#fff; }
+  .hero::after { content:""; position:absolute; width:380px; height:380px; right:-120px; bottom:-170px; background:rgba(255,255,255,.08); border-radius:50%; }
+  .hero-content { max-width:620px; position:relative; z-index:2; }
+  .badge { display:inline-block; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); padding:7px 14px; border-radius:100px; margin-bottom:16px; font-size:13px; }
+  .hero h1 { font-size:clamp(34px,6vw,60px); line-height:1.05; margin-bottom:16px; }
+  .hero h1 span { color:#fef08a; }
+  .hero p { font-size:17px; line-height:1.7; color:#dcfce7; margin-bottom:22px; }
+  .hero-actions { display:flex; gap:12px; flex-wrap:wrap; }
+  .hero-button { border:none; background:#fff; color:var(--primary-dark); padding:13px 21px; border-radius:12px; font-weight:bold; box-shadow:0 8px 20px rgba(0,0,0,.15); }
+  .hero-outline { display:inline-flex; align-items:center; gap:7px; border:1.5px solid rgba(255,255,255,.6); background:transparent; color:#fff; padding:13px 21px; border-radius:12px; font-weight:bold; text-decoration:none; }
+
+  /* CONTAINER / SECTION */
+  .container { max-width:1200px; margin:auto; padding:20px 20px; }
+  .section-title { margin-bottom:20px; }
+  .section-title h2 { font-size:28px; color:var(--dark); margin-bottom:5px; }
+  .section-title p { color:#6b7280; }
+
+  .toolbar { display:flex; gap:12px; margin-bottom:22px; flex-wrap:wrap; }
+  .search-box { flex:1; min-width:220px; }
+  .search-box input { width:100%; border:1px solid #d1d5db; border-radius:12px; padding:13px 16px; outline:none; background:#fff; }
+  .search-box input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(22,163,74,.1); }
+  .category-select { min-width:170px; border:1px solid #d1d5db; border-radius:12px; padding:13px; background:#fff; outline:none; }
+
+  /* PRODUCTS */
+  .product-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  .no-results { grid-column:1/-1; text-align:center; padding:45px 20px; color:#9ca3af; }
+  .product-card { background:#fff; border-radius:18px; overflow:hidden; box-shadow:var(--shadow); transition:.25s; display:flex; flex-direction:column; }
+  .product-card:hover { transform:translateY(-4px); box-shadow:0 15px 35px rgba(0,0,0,.12); }
+  .product-image { height:170px; display:grid; place-items:center; font-size:65px; background:linear-gradient(135deg,#dcfce7,#fef9c3); position:relative; }
+  .product-tag { position:absolute; top:10px; left:10px; background:var(--secondary); color:#fff; font-size:10px; font-weight:bold; padding:4px 9px; border-radius:100px; }
+  .product-info { padding:16px; display:flex; flex-direction:column; flex:1; }
+  .product-category { font-size:10px; color:var(--primary); text-transform:uppercase; font-weight:bold; letter-spacing:.6px; }
+  .product-name { margin:5px 0; font-size:17px; color:var(--dark); }
+  .product-description { color:#6b7280; font-size:12px; line-height:1.5; flex:1; }
+  .product-bottom { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:14px; }
+  .price { font-weight:800; color:var(--primary-dark); font-size:16px; }
+  .add-button { border:none; background:var(--primary); color:#fff; padding:9px 12px; border-radius:10px; font-weight:bold; }
+  .add-button:hover { background:var(--primary-dark); }
+
+  /* PROMO & CTA */
+  .promo { margin-top:45px; padding:26px; border-radius:20px; background:linear-gradient(135deg,#fef3c7,#fffbeb); display:flex; justify-content:space-between; align-items:center; gap:18px; flex-wrap:wrap; }
+  .promo h3 { color:#92400e; margin-bottom:5px; }
+  .promo p { color:#a16207; }
+  .promo-code { background:#fff; border:2px dashed #f59e0b; padding:12px 18px; border-radius:10px; color:#b45309; font-weight:bold; white-space:nowrap; }
+
+  .contact-cta { margin-top:30px; padding:36px; border-radius:20px; background:linear-gradient(135deg,#1da851,#25d366); color:#fff; display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; }
+  .contact-cta h3 { font-size:22px; margin-bottom:6px; }
+  .contact-cta p { color:#dcfce7; max-width:400px; }
+  .contact-cta-button { display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--wa-dark); border:none; padding:13px 20px; border-radius:12px; font-weight:bold; text-decoration:none; white-space:nowrap; }
+
+  /* FLOATING WHATSAPP */
+  .whatsapp-float { position:fixed; bottom:22px; left:22px; z-index:1500; display:flex; align-items:center; gap:9px; background:var(--wa); color:#fff; text-decoration:none; padding:13px 17px; border-radius:100px; box-shadow:0 10px 25px rgba(37,211,102,.45); font-weight:bold; font-size:13px; }
+  .whatsapp-float:hover { background:var(--wa-dark); }
+
+  /* CART */
+  .overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:1999; display:none; }
+  .overlay.show { display:block; }
+  .cart-panel { position:fixed; z-index:2000; right:-430px; top:0; width:min(410px,100%); height:100vh; background:#fff; transition:.3s; display:flex; flex-direction:column; box-shadow:-10px 0 30px rgba(0,0,0,.15); }
+  .cart-panel.show { right:0; }
+  .cart-header { padding:18px 20px; border-bottom:1px solid #eee; display:flex; align-items:center; justify-content:space-between; }
+  .close-cart, .close-modal { border:none; background:#f3f4f6; width:36px; height:36px; border-radius:10px; font-size:19px; }
+  .cart-items { flex:1; overflow-y:auto; padding:14px 20px; }
+  .cart-item { display:flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; }
+  .cart-item-icon { width:54px; height:54px; display:grid; place-items:center; background:#f0fdf4; border-radius:12px; font-size:28px; }
+  .cart-item-info { flex:1; }
+  .cart-item-info h4 { color:var(--dark); margin-bottom:4px; font-size:14px; }
+  .cart-item-price { color:var(--primary-dark); font-size:12px; font-weight:bold; }
+  .qty { display:flex; align-items:center; gap:8px; margin-top:7px; }
+  .qty button { border:none; background:#f3f4f6; width:26px; height:26px; border-radius:7px; }
+  .remove { border:none; background:none; color:var(--danger); font-size:12px; margin-top:5px; }
+  .cart-empty { text-align:center; color:#9ca3af; padding:55px 20px; }
+  .cart-empty span { display:block; font-size:42px; margin-bottom:8px; }
+  .cart-footer { border-top:1px solid #eee; padding:18px 20px; }
+  .summary { display:flex; justify-content:space-between; margin-bottom:7px; font-size:14px; }
+  .total { font-size:19px; font-weight:800; color:var(--primary-dark); margin:9px 0 16px; }
+  .checkout-button { width:100%; border:none; background:var(--wa); color:#fff; padding:13px; border-radius:12px; font-weight:bold; font-size:15px; display:flex; align-items:center; justify-content:center; gap:7px; }
+  .checkout-button:hover:not(:disabled) { background:var(--wa-dark); }
+  .checkout-button:disabled { background:#d1d5db; cursor:not-allowed; }
+
+  /* MODAL */
+  .modal { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:3000; display:none; align-items:center; justify-content:center; padding:20px; }
+  .modal.show { display:flex; }
+  .modal-content { width:min(470px,100%); max-height:90vh; overflow-y:auto; background:#fff; border-radius:20px; padding:22px; }
+  .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+  .modal-order-summary { background:var(--light); border-radius:13px; padding:13px 15px; margin-bottom:16px; }
+  .form-group { margin-bottom:14px; }
+  .form-group label { display:block; margin-bottom:6px; font-size:13px; font-weight:bold; color:var(--dark); }
+  .form-group input, .form-group textarea { width:100%; padding:11px; border:1px solid #d1d5db; border-radius:10px; outline:none; }
+  .form-group input:focus, .form-group textarea:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(22,163,74,.1); }
+  .form-group textarea { min-height:70px; resize:vertical; }
+  .form-hint { font-size:11px; color:#9ca3af; margin-top:5px; }
+  .submit-order { width:100%; border:none; background:var(--wa); color:#fff; padding:13px; border-radius:11px; font-weight:bold; margin-top:4px; display:flex; align-items:center; justify-content:center; gap:7px; font-size:14px; }
+  .submit-order:hover { background:var(--wa-dark); }
+
+  /* FOOTER */
+  footer { margin-top:55px; background:#14532d; color:#fff; padding:36px 20px; }
+  .footer-content { max-width:1200px; margin:auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:30px; }
+  footer h3 { margin-bottom:10px; }
+  footer p { color:#bbf7d0; line-height:1.6; font-size:13px; }
+  .footer-links { list-style:none; }
+  .footer-links li { margin-bottom:8px; font-size:13px; color:#bbf7d0; }
+  .footer-links a { color:#bbf7d0; text-decoration:none; }
+  .footer-links a:hover { color:#fff; }
+  .footer-whatsapp { display:inline-flex; align-items:center; gap:7px; margin-top:8px; color:#fff; font-weight:bold; text-decoration:none; background:rgba(255,255,255,.12); padding:9px 13px; border-radius:10px; font-size:12px; }
+  .copyright { max-width:1200px; margin:26px auto 0; padding-top:18px; border-top:1px solid rgba(255,255,255,.15); color:#bbf7d0; font-size:12px; }
+
+  .toast { position:fixed; z-index:5000; bottom:22px; left:50%; transform:translate(-50%,100px); background:var(--dark); color:#fff; padding:12px 18px; border-radius:12px; opacity:0; transition:.3s; }
+  .toast.show { opacity:1; transform:translate(-50%,0); }
+
+  @media (max-width:900px) {
+    .product-grid { grid-template-columns:repeat(2,1fr); }
+    .nav-links { display:none; }
+    .hero { margin:14px; padding:40px 26px; }
+    .footer-content { grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:600px) {
+    .hero { min-height:360px; border-radius:18px; padding:32px 20px; }
+    .product-grid { gap:10px; }
+    .product-image { height:130px; font-size:48px; }
+    .product-name { font-size:14px; }
+    .promo, .contact-cta { flex-direction:column; align-items:flex-start; }
+    .footer-content { grid-template-columns:1fr; }
+    .whatsapp-float span.wa-text { display:none; }
+    .whatsapp-float { bottom:16px; left:16px; padding:14px; border-radius:50%; }
+  }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-container">
+    <a href="#" class="logo"><span class="logo-icon">🐟</span>IwakTempe</a>
+    <nav class="nav-links" aria-label="Navigasi utama">
+      <a href="#products">Produk</a>
+      <a href="#kontak">Kontak</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-whatsapp" href="#" id="navWhatsapp" target="_blank" rel="noopener">💬 WhatsApp</a>
+      <button type="button" class="cart-button" onclick="openCart()" aria-label="Buka keranjang">🛒<span class="cart-count" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero" aria-label="Selamat datang">
+  <div class="hero-content">
+    <span class="badge">🔥 Produk Lokal Pilihan</span>
+    <h1>Enak, Gurih,<br><span>Bikin Nagih!</span></h1>
+    <p>Nikmati olahan IwakTempe dari bahan pilihan, cocok untuk lauk keluarga maupun camilan sehari-hari.</p>
+    <div class="hero-actions">
+      <button type="button" class="hero-button" onclick="scrollToProducts()">Belanja Sekarang →</button>
+      <a class="hero-outline" href="#" id="heroWhatsapp" target="_blank" rel="noopener">💬 Tanya via WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<section class="container" id="products">
+  <div class="section-title">
+    <h2>Produk Pilihan</h2>
+    <p>Pilih menu favoritmu dan masukkan ke keranjang.</p>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box"><input type="text" id="searchInput" placeholder="🔎 Cari produk..." oninput="renderProducts()"></div>
+    <select id="categorySelect" class="category-select" onchange="renderProducts()">
+      <option value="all">Semua Kategori</option>
+      <option value="iwak">Iwak</option>
+      <option value="tempe">Tempe</option>
+      <option value="paket">Paket Hemat</option>
+    </select>
+  </div>
+
+  <div class="product-grid" id="productGrid"></div>
+
+  <section class="promo">
+    <div><h3>🎉 Promo Hari Ini</h3><p>Dapatkan potongan harga untuk pembelian paket hemat.</p></div>
+    <div class="promo-code">KODE: IWAKHEMAT</div>
+  </section>
+
+  <section class="contact-cta" id="kontak">
+    <div><h3>Masih Bingung Mau Pesan Apa?</h3><p>Chat admin kami langsung di WhatsApp, kami bantu rekomendasikan menu sesuai selera dan budget kamu.</p></div>
+    <a class="contact-cta-button" href="#" id="ctaWhatsapp" target="_blank" rel="noopener">💬 Chat Sekarang</a>
+  </section>
+</section>
+</main>
+
+<a class="whatsapp-float" href="#" id="floatWhatsapp" target="_blank" rel="noopener" aria-label="Hubungi kami via WhatsApp">
+  <span class="wa-icon">💬</span><span class="wa-text">Hubungi Kami</span>
+</a>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<aside class="cart-panel" id="cartPanel">
+  <div class="cart-header"><h2>🛒 Keranjang</h2><button type="button" class="close-cart" onclick="closeCart()" aria-label="Tutup keranjang">×</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="summary"><span>Jumlah Item</span><span id="cartTotalItems">0</span></div>
+    <div class="summary"><span>Subtotal</span><strong id="cartSubtotal">Rp0</strong></div>
+    <div class="summary"><span>Diskon</span><strong id="cartDiscount">Rp0</strong></div>
+    <div class="summary total"><span>Total</span><span id="cartTotal">Rp0</span></div>
+    <button type="button" class="checkout-button" id="checkoutButton" onclick="openCheckout()" disabled>💬 Checkout via WhatsApp</button>
+  </div>
+</aside>
+
+<div class="modal" id="checkoutModal">
+  <div class="modal-content">
+    <div class="modal-header"><h2>Selesaikan Pesanan</h2><button type="button" class="close-modal" onclick="closeCheckout()" aria-label="Tutup modal">×</button></div>
+    <div class="modal-order-summary">
+      <div class="summary"><span>Jumlah Item</span><span id="modalItemCount">0</span></div>
+      <div class="summary total" style="margin:6px 0 0;"><span>Total Pesanan</span><span id="modalTotal">Rp0</span></div>
+    </div>
+    <form id="checkoutForm" onsubmit="submitOrder(event)">
+      <div class="form-group"><label for="custName">Nama Lengkap</label><input type="text" id="custName" autocomplete="name" required placeholder="Nama kamu"></div>
+      <div class="form-group"><label for="custPhone">Nomor WhatsApp</label><input type="tel" id="custPhone" autocomplete="tel" required placeholder="08xxxxxxxxxx"></div>
+      <div class="form-group"><label for="custAddress">Alamat Pengiriman</label><textarea id="custAddress" autocomplete="street-address" required placeholder="Alamat lengkap untuk pengiriman"></textarea></div>
+      <div class="form-group">
+        <label for="custNote">Catatan (opsional)</label>
+        <textarea id="custNote" placeholder="Contoh: tidak pakai sambal, dikirim sore hari, dll."></textarea>
+        <div class="form-hint">Pesanan akan dikirim ke admin lewat WhatsApp untuk dikonfirmasi.</div>
+      </div>
+      <button type="submit" class="submit-order">💬 Kirim Pesanan ke WhatsApp</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-content">
+    <div>
+      <h3>🐟 IwakTempe</h3>
+      <p>Toko olahan ikan dan tempe rumahan dengan bahan pilihan. Enak, gurih, bikin nagih untuk lauk keluarga maupun camilan harian.</p>
+      <a class="footer-whatsapp" href="#" id="footerWhatsapp" target="_blank" rel="noopener">💬 Chat Admin di WhatsApp</a>
+    </div>
+    <div>
+      <h3>Menu</h3>
+      <ul class="footer-links"><li><a href="#products">Produk</a></li><li><a href="#kontak">Kontak</a></li></ul>
+    </div>
+    <div>
+      <h3>Kontak</h3>
+      <ul class="footer-links"><li>💬 WhatsApp: 0812-3456-7890</li><li>📍 Surabaya, Jawa Timur</li><li>🕒 Setiap hari, 08.00 - 20.00</li></ul>
+    </div>
+  </div>
+  <div class="copyright">© 2026 IwakTempe. Semua hak cipta dilindungi.</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // Ganti nomor ini dengan nomor WhatsApp admin toko (kode negara tanpa + atau 0 di depan)
+  const WHATSAPP_NUMBER = "6285855096470";
+  const WA_DEFAULT_MSG = "Halo IwakTempe, saya ingin bertanya tentang produk yang tersedia.";
+
+  function waLink(msg) { return `https://wa.me/+6285855096470${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`; }
+  function setupWhatsappLinks() {
+    const link = waLink(WA_DEFAULT_MSG);
+    ["navWhatsapp","heroWhatsapp","ctaWhatsapp","floatWhatsapp","footerWhatsapp"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.href = link;
+    });
+  }
+
+  const products = [
+    { id:1, name:"Iwak Pete Sambal", category:"iwak", icon:"🐟", description:"Ikan goreng bumbu pete dengan sambal khas rumahan.", price:25000, tag:"Favorit" },
+    { id:2, name:"Iwak Presto", category:"iwak", icon:"🍤", description:"Ikan presto empuk hingga ke tulang, siap goreng.", price:22000 },
+    { id:3, name:"Iwak Asap", category:"iwak", icon:"🐠", description:"Ikan asap gurih dengan aroma khas kayu pilihan.", price:28000 },
+    { id:4, name:"Tempe Mendoan", category:"tempe", icon:"🍽️", description:"Tempe tipis digoreng renyah dengan tepung berbumbu.", price:12000 },
+    { id:5, name:"Keripik Tempe Original", category:"tempe", icon:"🥔", description:"Keripik tempe renyah, gurih, cocok untuk camilan.", price:15000, tag:"Baru" },
+    { id:6, name:"Tempe Bacem", category:"tempe", icon:"🍢", description:"Tempe manis gurih diungkep bumbu tradisional.", price:13
